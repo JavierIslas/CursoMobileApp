@@ -1,13 +1,12 @@
 @import "~@nativescript/theme/core";
 @import "~@nativescript/theme/blue";
-
-
+//@import "app.android.scss";
+//@import "app.ios.scss";
 
 // Place any CSS rules you want to apply on both iOS and Android here.
 // This is where the vast majority of your CSS code goes.
 
 // Font icon class
-
 .fab {
     font-family: "Font Awesome 5 Brands", "fa-brands-400";
     font-weight: 400;
@@ -30,7 +29,7 @@
         color: const(grey);
         font-size: 20;
         vertical-align: center;
-        horizontal-align: center;
+        //horizontal-align: center;
     }
 
     &-icon {
@@ -42,5 +41,5 @@
 
 // Drawer navigation custom styles
 .nt-drawer__header-image {
-    color: const(green);
+    color: const(grey);
 }

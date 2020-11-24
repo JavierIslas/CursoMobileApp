@@ -18,12 +18,17 @@ https://docs.nativescript.org/angular/ui/professional-ui-components/ng-SideDrawe
                     <Label col="1" text="Home" class="p-r-10"></Label>
                 </GridLayout>
 
+                <GridLayout columns="auto, *" class="nt-drawer__list-item" [class.-selected]="isComponentSelected('/products')" (tap)="onNavItemTap('/products')">
+                    <Label col="0" text="&#xf1ea;" class="nt-icon far"></Label>
+                    <Label col="1" text="Products" class="p-r-10"></Label>
+                </GridLayout>
+
                 <GridLayout columns="auto, *" class="nt-drawer__list-item" [class.-selected]="isComponentSelected('/browse')" (tap)="onNavItemTap('/browse')">
                     <Label col="0" text="&#xf1ea;" class="nt-icon far"></Label>
                     <Label col="1" text="Browse" class="p-r-10"></Label>
                 </GridLayout>
 
-                <GridLayout columns="auto, *" class="nt-drawer__list-item" [class.-selected]="isComponentSelected('/search')" (tap)="onNavItemTap('/search/main')">
+                <GridLayout columns="auto, *" class="nt-drawer__list-item" [class.-selected]="isComponentSelected('/search')" (tap)="onNavItemTap('/search')">
                     <Label col="0" text="&#xf002;" class="nt-icon fas"></Label>
                     <Label col="1" text="Search" class="p-r-10"></Label>
                 </GridLayout>
@@ -33,20 +38,9 @@ https://docs.nativescript.org/angular/ui/professional-ui-components/ng-SideDrawe
                     <Label col="1" text="Featured" class="p-r-10"></Label>
                 </GridLayout>
 
-                <GridLayout columns="auto, *" class="nt-drawer__list-item" [class.-selected]="isComponentSelected('/prueba')" (tap)="onNavItemTap('/prueba')">
-                    <Label col="0" text="&#xf005;" class="nt-icon fas"></Label>
-                    <Label col="1" text="Prueba" class="p-r-10"></Label>
-                </GridLayout>
-
-                
-                <GridLayout columns="auto, *" class="nt-drawer__list-item" [class.-selected]="isComponentSelected('/detalle')" (tap)="onNavItemTap('/detalle')">
-                    <Label col="0" text="&#xf005;" class="nt-icon fas"></Label>
-                    <Label col="1" text="Detalle" class="p-r-10"></Label>
-                </GridLayout>
-
-                <GridLayout columns="auto, *" class="nt-drawer__list-item" [class.-selected]="isComponentSelected('/listado')" (tap)="onNavItemTap('/listado')">
-                    <Label col="0" text="&#xf005;" class="nt-icon fas"></Label>
-                    <Label col="1" text="Listado" class="p-r-10"></Label>
+                <GridLayout columns="auto, *" class="nt-drawer__list-item" [class.-selected]="isComponentSelected('/contact')" (tap)="onNavItemTap('/contact')">
+                    <Label col="0" text="&#xf1ea;" class="nt-icon far"></Label>
+                    <Label col="1" text="Contact" class="p-r-10"></Label>
                 </GridLayout>
     
                 <StackLayout class="hr"></StackLayout>
@@ -55,7 +49,6 @@ https://docs.nativescript.org/angular/ui/professional-ui-components/ng-SideDrawe
                     <Label col="0" text="&#xf013;" class="nt-icon fas"></Label>
                     <Label col="1" text="Settings" class="p-r-10"></Label>
                 </GridLayout>
-
             </StackLayout>
         </ScrollView>
     </GridLayout>
