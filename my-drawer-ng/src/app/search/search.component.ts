@@ -1,90 +1,81 @@
+
 import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
-import * as Toast from "nativescript-toasts";
 import { RadSideDrawer } from "nativescript-ui-sidedrawer";
-import { Application, Color, Dialogs, View } from "@nativescript/core";
-import { NoticiasService } from "../domain/noticias.service";
-import { registerElement } from "@nativescript/angular";
-import { delay } from "rxjs/operators";
-
-registerElement("PullToRefresh", () => require("@nstudio/nativescript-pulltorefresh").PullToRefresh);
-
+import { Application, Color, View } from "@nativescript/core";
+import { NoticiasServices } from "../domain/noticias.service";
+import { RouterExtensions } from "@nativescript/angular";
+import * as Toast from "nativescript-toasts";
+import { AppState } from "../app.module";
+import { Store } from "@ngrx/store";
+import { Noticia, NuevaNoticiaAction } from "../domain/noticias-state.model";
 @Component({
     selector: "Search",
     templateUrl: "./search.component.html",
-    //providers: [NoticiasService]
+  //  providers: [NoticiasServices]
 })
-
 export class SearchComponent implements OnInit {
-    resultados: Array<string>;
-    @ViewChild("layout") layout: ElementRef;
+  resultados: Array<string>;
+  textFieldValue: string;
+  @ViewChild("layout") layout: ElementRef;
 
-    constructor(public noticias: NoticiasService) {
+    constructor(private noticias: NoticiasServices, 
+      private routerExtensions: RouterExtensions,
+      private store: Store<AppState>
+      ) {
         // Use the component constructor to inject providers.
     }
 
-    doLater(fn) { setTimeout(fn, 1000);}
-
     ngOnInit(): void {
-        // Init your component properties here.
-        /*this.noticias.agregar("Hola!");
-        this.noticias.agregar("Seleccionar categoría");
-        this.noticias.agregar("Opcional");
-        this.doLater(() =>
-            Dialogs.action("Mensaje", "Ingresar", ["Seleccionar"])
-                .then((result) => {
-                    console.log("resultado" + result);
-                    if (result === "Seleccionar") {
-                        //this.doLater(() => 
-                            const toastOptions: Toast.ToastOptions = {text: "Atributo seleccionado", duration: Toast.DURATION.SHORT}
-                            this.doLater(() => Toast.show(toastOptions));
-                    } /*else if (result === "Opcion2") {
-                        this.doLater(() =>
-                            Dialogs.alert({
-                                title: "Título 2",
-                                message: "msg 2",
-                                okButtonText: "btn 2"
-                            }).then(() => console.log("Cerrado 2!")));
-                    }
-                }));*/
-        
+      this.store.select((state)=>  state.noticias.sugerida)
+      .subscribe((data)=>{
+        const f = data;
+        if(f != null){
+          Toast.show({text: "Sugerimos leer: "+f.titulo, duration: Toast.DURATION.SHORT});
+        }
+      });
     }
 
     onDrawerButtonTap(): void {
         const sideDrawer = <RadSideDrawer>Application.getRootView();
         sideDrawer.showDrawer();
     }
+    onButtonTap(){
+      this.noticias.agregar(this.textFieldValue).then((r: any)=>{
+        console.log("resultados buscar ahora"+JSON.stringify(r));
+        this.resultados  = r;      
+      });
+    }
+
+
 
     onItemTap(x): void {
-        console.dir(x);
+      console.dir(x);
+
+    //   this.routerExtensions.navigate(["/DetalleSearch"], {
+    //     transition: {
+    //         name: "fade"
+    //     }
+    // });
+
+       this.store.dispatch(new NuevaNoticiaAction(new Noticia(x.view.bindingContext)));
+
     }
 
-    refreshList(args) {
-        const pullRefresh = args.object;
-        setTimeout(function () {
-           pullRefresh.refreshing = false;
-        }, 1000);
-    }
+    
+    buscarAhora(s: string ) {
 
-    buscarAhora(s: string) {
-        /*this.resultados = this.noticias.buscar().filter((x) => x.indexOf(s) >= 0);
+      console.dir("Buscar ahora"+s);
+      this.noticias.buscar(s).then((r: any)=>{
+        console.log("resultados buscar ahora"+JSON.stringify(r));
+        this.resultados  = r;
+      },(e) => {
+        console.log("error buscar ahora"+e);
+        Toast.show({ text: "Error en la busqueda", duration: Toast.DURATION.SHORT});
+      });
 
-        const layout = <View>this.layout.nativeElement;
-        layout.animate({
-            backgroundColor: new Color("blue"),
-            duration: 3000,
-            delay: 1500
-        }).then(() => layout.animate({
-            backgroundColor: new Color("white"),
-            duration: 3000,
-            delay: 1500
-        }));*/
-        console.dir("buscarAhora" + s);
-        this.noticias.buscar(s).then((r: any) => {
-            console.log("resultados buscarAhora: " + JSON.stringify(r));
-            this.resultados = r;
-        }, (e) => {
-            console.log("error buscarAhora " + e);
-            Toast.show({text: "Error en la búsqueda", duration: Toast.DURATION.SHORT});
-        });
-    }
+
+   
+ 
+       
+  }
 }

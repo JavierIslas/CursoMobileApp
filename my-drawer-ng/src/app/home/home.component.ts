@@ -1,7 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { RadSideDrawer } from "nativescript-ui-sidedrawer";
 import { Application } from "@nativescript/core";
-import { NoticiasService } from "../domain/noticias.service";
 
 @Component({
     selector: "Home",
@@ -9,15 +8,12 @@ import { NoticiasService } from "../domain/noticias.service";
 })
 export class HomeComponent implements OnInit {
 
-    constructor(public noticias:NoticiasService) {
+    constructor() {
         // Use the component constructor to inject providers.
     }
 
     ngOnInit(): void {
         // Init your component properties here.
-        this.noticias.agregar("Home 1");
-        this.noticias.agregar("Home 2");
-        this.noticias.agregar("Home 3");
     }
 
     onDrawerButtonTap(): void {

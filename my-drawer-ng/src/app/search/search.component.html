@@ -12,30 +12,23 @@
     <ActionItem icon="res://menu" android:visibility="collapsed" (tap)="onDrawerButtonTap()"
         ios.position="left">
     </ActionItem>
-    <Label class="action-bar-title" text="Search"></Label>
+    <Label text="Search"></Label>
 </ActionBar>
-
 <StackLayout class="page__content" #layout>
-    <Label class="page__content-icon fas" text="&#xf002;"></Label>
+    <Label class="page__content-icon fas texto-rojo" text="&#xf002;" #logo></Label>
     <SearchForm (search)="buscarAhora($event)"></SearchForm>
-    <PullToRefresh (refresh)="refreshList($event)">
-        <ListView class="list-group" [items]="this.resultados" (itemTap)="onItemTap($event)" style="height:1250px">
-            <ng-template let-x="item">
-                <FlexboxLayout flexDirection="row" class="list-group-item">
-                    <TextField #texto="ngModel" [(ngModel)]="textFieldValue" hint="Ingresar texto..." required minlen="4"></TextField>
-                    <Label *ngIf="texto.hasError('required')" text="*"></Label>
-                    <Label *ngIf="!texto.hasError('required') && texto.hasError('minlen')" text="4+"></Label>
-                    <Image src="res://icon" class="thumb img-circle"></Image>
-                    <Label [text]="x" class="list-group-item-heading" verticalAligment="center" style="width: 60%"></Label>
-                </FlexboxLayout>
-                <Button text="Buscar!" (tap)="onButtonTap" *ngIf="texto.valid"></Button>
-            </ng-template>
-        </ListView>
-    </PullToRefresh>
+    <ListView class="list-group" [items]="this.resultados" (itemTap)="onItemTap($event)"
+              style="height: 1200px; background-color:antiquewhite">
+        <ng-template let-x="item">
+            <FlexboxLayout flexDirection="row" class="list-group-item">
+                <Image src="res://icon" class="thumb img-circle"></Image>
+                <label [text]="x" class="list-group-item-heading"
+                       verticalAlignment="center" style="width:60%"></label>
+            </FlexboxLayout>
+        </ng-template>
+    </ListView>
+
+    <Button [text]="c"></Button>
+
 </StackLayout>
-<GridLayout columns="auto, *, auto" rows="auto, 25" verticalAlignment="top" backgroundColor="lightgray">
-    <Image src="~/icon.jpg" rowSpan="2" width="72" height="72" margin="3" verticalAlignment="top"></Image>
-    <Label text="Excelente Hotel!" textWrap="true" col="1" colSpan="2" minHeight="50" fontSize="20" margin="3"></Label>
-    <Label text="Usuario: Carlos Perez" col="1" row="1" fontSize="14" horizontalAlignment="left" verticalAlignment="bottom" margin="3"></Label>
-    <Label text="Puntaje: 4.3" col="2" row="1" color="#10C2B0" fontSize="14" verticalAlignment="bottom" margin="3"></Label>
-</GridLayout>
+  

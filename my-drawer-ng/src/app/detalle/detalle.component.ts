@@ -1,47 +1,67 @@
-import { Component, OnInit } from "@angular/core";
-import { RadSideDrawer } from "nativescript-ui-sidedrawer";
-import * as app from "tns-core-modules/application";
-import { NoticiasService } from "../domain/noticias.service";
-
+import { Component, OnInit } from '@angular/core';
+import * as Toast from "nativescript-toasts"
+import { ItemsService } from '../domain/items.service';
+import * as dialogs from "@nativescript/core/ui/dialogs";
+import { GestureEventData } from '@nativescript/core/ui/gestures';
+import { GridLayout } from '@nativescript/core/ui/layouts/grid-layout';
+import { Color } from '@nativescript/core/color';
 
 @Component({
-    selector: "etalle",
-    moduleId: module.id,
-    templateUrl: "./detalle.component.html",
-    //providers: [NoticiasService]
+  selector: 'ns-detalle',
+  templateUrl: './detalle.component.html',
+  styleUrls: ['./detalle.component.css']
 })
-
 export class DetalleComponent implements OnInit {
-    resultados: Array<string> = [];
 
-    constructor(private noticias: NoticiasService) {
-        // Use the component constructor to inject providers.
+    constructor(private comentario: ItemsService) {
+        
     }
 
     ngOnInit(): void {
-        // Init your component properties here.
-       this.noticias.agregar("detalle!");
-       this.noticias.agregar("detalle 2");
-       this.noticias.agregar("detalle 3");
-        }
-
-    onDrawerButtonTap(): void {
-        const sideDrawer = <RadSideDrawer>app.getRootView();
-        sideDrawer.showDrawer();
-    }
-    onItemTap(x): void{
-        console.dir(x);
-    }
-    
-
+        this.comentario.agregarComentario("Excelente");
+  }
     onPull(e) {
-        console.dir(e);
+        console.log("PULLEANDO..");
         const pullRefresh = e.object;
         setTimeout(() => {
-        this.resultados.push("xxxxxxx");
-        pullRefresh.refreshing = false;
-        }, 2000);
-       }
+            this.comentario.agregarComentario("Muy Bueno");
+            pullRefresh.refreshing = false;
+        }, 1000);
+    };
 
+    botonClicado() {
+        dialogs.alert("Diste clic a OK").then(() => {
+            console.log("Dialog closed!");
+        });
+    }
+    botonCorregir() {
+        const toastOptions: Toast.ToastOptions = { text: "Correcto", duration: Toast.DURATION.SHORT }
+        dialogs.action("Corregir", "Cancelar", ["eliminar", "archivar"]).then(result => {
+            console.log("Dialog result: " + result);
+            if (result == "eliminar") {
+                console.log("clic eliminar");
+                this.comentario.eliminarUltimo();
+            } else if (result == "archivar") {
+                console.log("clic archivar");
+                this.comentario.listar();
+            }
+        }).then(() => Toast.show(toastOptions));
+    }
+
+    onLongPress(args: GestureEventData) {
+        console.log("Objeto que trigger evento: " + args.object);
+        console.log("Vista que trigger evento: " + args.view);
+        console.log("nombre de evento: " + args.eventName);
+
+        const grid = <GridLayout>args.object;
+        grid.animate({
+            backgroundColor: new Color("#c6e2ff"),
+            duration: 300,
+            delay: 300
+        }).then(() => grid.animate({
+            backgroundColor: new Color("#e8e9e8"),
+            duration: 300,
+            delay: 300
+        }));
+    }
 }
-

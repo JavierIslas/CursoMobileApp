@@ -1,35 +1,60 @@
-import { Component, OnInit } from "@angular/core";
-import { RadSideDrawer } from "nativescript-ui-sidedrawer";
-import * as app from "tns-core-modules/application";
-import { NoticiasService } from "../domain/noticias.service";
-
+import { Component, OnInit } from '@angular/core';
+import { RouterExtensions } from '@nativescript/angular';
+import { ItemsService } from '../domain/items.service';
 
 @Component({
-    selector: "Listado",
-    moduleId: module.id,
-    templateUrl: "./listado.component.html",
-    //providers: [NoticiasService]
+    selector: 'ns-listado',
+    templateUrl: './listado.component.html',
+    styleUrls: ['./listado.component.css']
 })
 export class ListadoComponent implements OnInit {
 
-    constructor(private noticias: NoticiasService) {
-        // Use the component constructor to inject providers.
-    }
+    constructor(public items: ItemsService, private ruta: RouterExtensions) { }
 
     ngOnInit(): void {
-        // Init your component properties here.
-       this.noticias.agregar("Hotel 1");
-       this.noticias.agregar("Hotel 2");
-       this.noticias.agregar("Hotel 3");
+        this.items.crear("Noticia 1");
+        this.items.crear("Noticia 2");
+        this.items.crear("Noticia 3");
+
+    }
+    onItemTap(x): void {     //Segun tap, irá siempre a DETALLE
+        console.dir(x);
+        switch (x.index) {
+            case 0:
+                this.ruta.navigate(['/detalle'], {
+                    transition: {
+                        name: "fade"
+                    }
+                }); break;
+            case 1:
+                this.ruta.navigate(['/detalle'], {
+                    transition: {
+                        name: "fade"
+                    }
+                }); break;
+            case 2:
+                this.ruta.navigate(['/detalle'], {
+                    transition: {
+                        name: "fade"
+                    }
+                }); break;
+            default:
+                this.ruta.navigate(['/detalle'], {
+                    transition: {
+                        name: "fade"
+                    }
+                }); break;
         }
-
-    onDrawerButtonTap(): void {
-        const sideDrawer = <RadSideDrawer>app.getRootView();
-        sideDrawer.showDrawer();
     }
-    onItemTap(x): void{
-        console.log(x.index);
-    }
-
-
+    onPull(e) {
+        console.log(e);
+        const pullRefresh = e.object;
+        let i = 3;
+        setTimeout(() => {
+            this.items.crear("Noticia " + i);
+            pullRefresh.refreshing = false;
+        }, 1000);
+        i++;
+    };
 }
+
